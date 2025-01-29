@@ -25,6 +25,9 @@ export class Order extends Entity {
   @belongsTo(() => User)
   userId: string;
 
+  @belongsTo(() => Product)
+  productId: string;
+
   @hasMany(() => Product)
   products?: Product[];
 
