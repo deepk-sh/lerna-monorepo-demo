@@ -1,6 +1,12 @@
 import {Entity, hasMany, model, property} from '@loopback/repository';
 import {Order} from './order.model';
 
+enum ROLE {
+  SUPERADMIN = 'superadmin',
+  ADMIN = 'admin',
+  SUBSCRIBER = 'subscriber',
+}
+
 @model()
 export class User extends Entity {
   @property({
@@ -23,6 +29,16 @@ export class User extends Entity {
 
   @hasMany(() => Order)
   orders?: Order[];
+
+  @property({
+    type: 'string',
+    required: false,
+    default: ROLE.SUBSCRIBER,
+    jsonSchema: {
+      enum: Object.values(ROLE),
+    },
+  })
+  role: ROLE;
 
   constructor(data?: Partial<User>) {
     super(data);
