@@ -1,4 +1,5 @@
 import {Entity, model, property} from '@loopback/repository';
+import {FormattedDate} from '../decorators/formatted-date.decorator';
 
 @model()
 export class Product extends Entity {
@@ -25,6 +26,12 @@ export class Product extends Entity {
     required: true,
   })
   price: number;
+
+  @FormattedDate()
+  createdOn: string;
+
+  @FormattedDate()
+  modifiedOn: string;
 
   constructor(data?: Partial<Product>) {
     super(data);

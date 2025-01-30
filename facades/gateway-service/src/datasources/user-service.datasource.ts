@@ -6,7 +6,7 @@ const config = {
   connector: 'rest',
   crud: false,
   options: {
-    baseURL: 'http://127.0.0.1:3001',
+    baseUrl: 'http://127.0.0.1:3001',
     headers: {
       accept: 'application/json',
       'content-type': 'application/json',
@@ -16,7 +16,7 @@ const config = {
     {
       template: {
         method: 'GET',
-        url: 'http://127.0.0.1:3001/users',
+        url: '/users',
         query: {
           filter: '{filter}',
         },

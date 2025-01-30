@@ -1,5 +1,6 @@
 import {Entity, hasMany, model, property} from '@loopback/repository';
 import {Order} from './order.model';
+import {FormattedDate} from '../decorators/formatted-date.decorator';
 
 enum ROLE {
   SUPERADMIN = 'superadmin',
@@ -39,6 +40,12 @@ export class User extends Entity {
     },
   })
   role: ROLE;
+
+  @FormattedDate()
+  createdOn: string;
+
+  @FormattedDate()
+  modifiedOn: string;
 
   constructor(data?: Partial<User>) {
     super(data);

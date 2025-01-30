@@ -7,6 +7,7 @@ import {
 } from '@loopback/repository';
 import {User} from './user.model';
 import {Product} from './product.model';
+import {FormattedDate} from '../decorators/formatted-date.decorator';
 
 @model()
 export class Order extends Entity {
@@ -30,6 +31,12 @@ export class Order extends Entity {
 
   @hasMany(() => Product)
   products?: Product[];
+
+  @FormattedDate()
+  createdOn: string;
+
+  @FormattedDate()
+  modifiedOn: string;
 
   constructor(data?: Partial<Order>) {
     super(data);
