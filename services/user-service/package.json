@@ -34,7 +34,8 @@
     "prestart": "npm run rebuild",
     "start": "node -r source-map-support/register .",
     "clean": "lb-clean dist *.tsbuildinfo .eslintcache",
-    "rebuild": "npm run clean && npm run build"
+    "rebuild": "npm run clean && npm run build",
+    "start:watch": "tsc-watch --target es2017 --outDir ./dist --onSuccess \"node .\""
   },
   "repository": {
     "type": "git",
@@ -50,6 +51,8 @@
   ],
   "dependencies": {
     "@demo/core-module": "^0.0.1",
+    "@loopback/authentication": "^11.0.10",
+    "@loopback/authentication-jwt": "^0.15.10",
     "@loopback/boot": "^7.0.10",
     "@loopback/core": "^6.1.7",
     "@loopback/repository": "^7.0.10",
@@ -66,6 +69,7 @@
     "@types/node": "^16.18.123",
     "eslint": "^8.57.1",
     "source-map-support": "^0.5.21",
+    "tsc-watch": "^6.2.1",
     "typescript": "~5.2.2"
   }
 }

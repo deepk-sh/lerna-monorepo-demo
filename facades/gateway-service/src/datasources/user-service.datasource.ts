@@ -25,6 +25,26 @@ const config = {
         getUsers: ['filter'],
       },
     },
+    {
+      template: {
+        method: 'POST',
+        url: '/users',
+        body: '{user}',
+      },
+      functions: {
+        createUser: ['user'],
+      },
+    },
+    {
+      template: {
+        method: 'POST',
+        url: '/login',
+        body: '{creds}',
+      },
+      functions: {
+        login: ['creds'],
+      },
+    },
   ],
 };
 

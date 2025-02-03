@@ -36,4 +36,15 @@ export class UserRepository extends DefaultCrudRepository<
     data.modifiedOn = ISODate();
     return await super.updateAll(data, where, options);
   }
+
+  async findCredentials(
+    userId: typeof User.prototype.id,
+  ): Promise<User | undefined> {
+    return this.findById(userId)
+      .then()
+      .catch(err => {
+        if (err.code === 'ENTITY_NOT_FOUND') return undefined;
+        throw err;
+      });
+  }
 }

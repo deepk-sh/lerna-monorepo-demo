@@ -2,13 +2,16 @@ import {inject, Provider} from '@loopback/core';
 import {getService} from '@loopback/service-proxy';
 import {UserServiceDataSource} from '../datasources';
 import {User} from '@demo/core-module';
-import { Filter } from '@loopback/repository';
+import {Filter} from '@loopback/repository';
+import {Credentials} from '@loopback/authentication-jwt';
 
 export interface UserService {
   // this is where you define the Node.js methods that will be
   // mapped to REST/SOAP/gRPC operations as stated in the datasource
   // json file.
-  getUsers(filter?:Filter<User>): Promise<User[]>;
+  getUsers(filter?: Filter<User>): Promise<User[]>;
+  createUser(user: Partial<User>): Promise<User>;
+  login(creds: Credentials): Promise<{token: string}>;
 }
 
 export class UserServiceProvider implements Provider<UserService> {

@@ -1,8 +1,9 @@
 import {Entity, hasMany, model, property} from '@loopback/repository';
 import {Order} from './order.model';
 import {FormattedDate} from '../decorators/formatted-date.decorator';
+import {SchemaObject} from '@loopback/rest';
 
-enum ROLE {
+export enum ROLE {
   SUPERADMIN = 'superadmin',
   ADMIN = 'admin',
   SUBSCRIBER = 'subscriber',
@@ -47,6 +48,18 @@ export class User extends Entity {
   @FormattedDate()
   modifiedOn: string;
 
+  @property({
+    type: 'string',
+    required: true,
+  })
+  email: string;
+
+  @property({
+    type: 'string',
+    required: true,
+  })
+  password: string;
+
   constructor(data?: Partial<User>) {
     super(data);
   }
@@ -57,3 +70,18 @@ export interface UserRelations {
 }
 
 export type UserWithRelations = User & UserRelations;
+
+export const CredentialsSchema: SchemaObject = {
+  type: 'object',
+  required: ['email', 'password'],
+  properties: {
+    email: {
+      type: 'string',
+      format: 'email',
+    },
+    password: {
+      type: 'string',
+      minLength: 8,
+    },
+  },
+};

@@ -9,6 +9,12 @@ import {RestApplication} from '@loopback/rest';
 import {ServiceMixin} from '@loopback/service-proxy';
 import path from 'path';
 import {MySequence} from './sequence';
+import {AuthenticationComponent} from '@loopback/authentication';
+import {
+  JWTAuthenticationComponent,
+  TokenServiceBindings,
+} from '@loopback/authentication-jwt';
+import {JwtService} from './services';
 
 export {ApplicationConfig};
 
@@ -29,6 +35,11 @@ export class UserServiceApplication extends BootMixin(
       path: '/explorer',
     });
     this.component(RestExplorerComponent);
+
+    this.component(AuthenticationComponent);
+    this.component(JWTAuthenticationComponent);
+    this.bind(TokenServiceBindings.TOKEN_SERVICE).toClass(JwtService);
+    this.bind(TokenServiceBindings.TOKEN_SECRET).to('MY_SECRET_KEY');
 
     this.projectRoot = __dirname;
     // Customize @loopback/boot Booter Conventions here
