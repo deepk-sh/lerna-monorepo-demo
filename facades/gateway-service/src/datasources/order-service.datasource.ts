@@ -4,7 +4,7 @@ import {juggler} from '@loopback/repository';
 const config = {
   name: 'orderService',
   connector: 'rest',
-  baseURL: 'http://127.0.0.1:3003',
+  baseUrl: 'http://127.0.0.1:3003',
   crud: false,
   options: {
     headers: {
@@ -16,7 +16,7 @@ const config = {
     {
       template: {
         method: 'GET',
-        url: 'http://127.0.0.1:3003/orders',
+        url: '/orders',
         query: {
           filter: '{filter}',
         },

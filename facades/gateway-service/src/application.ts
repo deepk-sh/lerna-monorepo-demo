@@ -14,12 +14,9 @@ import {
   JWTAuthenticationComponent,
   TokenServiceBindings,
 } from '@loopback/authentication-jwt';
-import {
-  AuthorizationBindings,
-  JwtService,
-  RoleBasedAuthProvider,
-} from './services';
+import {AuthorizationBindings, RoleBasedAuthProvider} from './services';
 import {AuthorizationComponent} from '@loopback/authorization';
+import {JwtService} from '@demo/core-module';
 
 export {ApplicationConfig};
 

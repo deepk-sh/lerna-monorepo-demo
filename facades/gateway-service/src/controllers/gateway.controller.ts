@@ -1,7 +1,7 @@
 // Uncomment these imports to begin using these cool features!
 
-import {inject} from '@loopback/core';
-import {OrderService, roleAuth, UserService} from '../services';
+import {inject, intercept} from '@loopback/core';
+import {OrderService, ProductService, roleAuth, UserService} from '../services';
 import {
   get,
   getModelSchemaRef,
@@ -11,20 +11,22 @@ import {
   requestBody,
   response,
 } from '@loopback/rest';
-import {CredentialsSchema, User} from '@demo/core-module';
-import {Filter} from '@loopback/repository';
+import {CredentialsSchema, Product, ROLE, User} from '@demo/core-module';
+import {Filter, FilterExcludingWhere} from '@loopback/repository';
 import {authenticate} from '@loopback/authentication';
 import {hash, genSalt} from 'bcryptjs';
 import {Credentials} from '@loopback/authentication-jwt';
+import {userValidator} from '../interceptors/user-validator.interceptor';
 
 export class GatewayController {
   constructor(
     @inject('services.UserService') protected userService: UserService,
     @inject('services.OrderService') protected orderService: OrderService,
+    @inject('services.ProductService') protected productService: ProductService,
   ) {}
 
   @authenticate('jwt')
-  @roleAuth({allowedRoles: ['admin']})
+  @roleAuth({allowedRoles: [ROLE.ADMIN, ROLE.SUPERADMIN]})
   @get('/users')
   @response(200, {
     description: 'Array of User model instances',
@@ -45,7 +47,7 @@ export class GatewayController {
   }
 
   @authenticate('jwt')
-  @roleAuth({allowedRoles: ['admin']})
+  @roleAuth({allowedRoles: [ROLE.ADMIN, ROLE.SUPERADMIN]})
   @get('/users-order')
   @response(200, {
     description: 'Array of User model instances with orders',
@@ -92,6 +94,45 @@ export class GatewayController {
     return userOrders;
   }
 
+  @get('/users/{id}')
+  @response(200, {
+    description: 'User model instance',
+    content: {
+      'application/json': {
+        schema: getModelSchemaRef(User, {includeRelations: true}),
+      },
+    },
+  })
+  async findById(
+    @param.path.string('id') id: string,
+    @param.filter(User, {exclude: 'where'}) filter?: FilterExcludingWhere<User>,
+  ): Promise<User> {
+    return this.userService.findById(id, filter);
+  }
+
+  @intercept(userValidator)
+  @post('/users')
+  @response(200, {
+    description: 'User model instance',
+    content: {'application/json': {schema: getModelSchemaRef(User)}},
+  })
+  async create(
+    @requestBody({
+      content: {
+        'application/json': {
+          schema: getModelSchemaRef(User, {
+            title: 'NewUser',
+            exclude: ['id', 'password', 'createdOn', 'modifiedOn'],
+          }),
+        },
+      },
+    })
+    user: Omit<User, 'id'>,
+  ): Promise<User> {
+    return this.userService.create(user);
+  }
+
+  @intercept(userValidator)
   @post('/signup', {
     responses: {
       '200': {
@@ -110,7 +151,10 @@ export class GatewayController {
     @requestBody({
       content: {
         'application/json': {
-          schema: getModelSchemaRef(User, {title: 'User'}),
+          schema: getModelSchemaRef(User, {
+            title: 'NewUser',
+            exclude: ['id'],
+          }),
         },
       },
     })
@@ -148,5 +192,23 @@ export class GatewayController {
     creds: Credentials,
   ): Promise<{token: string}> {
     return this.userService.login(creds);
+  }
+
+  @get('/products')
+  @response(200, {
+    description: 'Array of Product model instances',
+    content: {
+      'application/json': {
+        schema: {
+          type: 'array',
+          items: getModelSchemaRef(Product, {includeRelations: true}),
+        },
+      },
+    },
+  })
+  async getProducts(
+    @param.filter(Product) filter?: Filter<Product>,
+  ): Promise<Product[]> {
+    return this.productService.getProducts(filter);
   }
 }

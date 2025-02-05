@@ -4,7 +4,7 @@ import {juggler} from '@loopback/repository';
 const config = {
   name: 'productService',
   connector: 'rest',
-  baseURL: 'http://127.0.0.1:3002',
+  baseUrl: 'http://127.0.0.1:3002',
   crud: false,
   options: {
     headers: {
@@ -16,10 +16,13 @@ const config = {
     {
       template: {
         method: 'GET',
-        url: 'http://127.0.0.1:3002/products',
+        url: '/products',
+        query: {
+          filter: '{filter}',
+        },
       },
       functions: {
-        getProducts: [],
+        getProducts: ['filter'],
       },
     },
   ],

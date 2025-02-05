@@ -2,9 +2,9 @@ import {injectable, inject, BindingScope} from '@loopback/core';
 import {TokenService} from '@loopback/authentication';
 import {securityId, UserProfile} from '@loopback/security';
 import {TokenServiceBindings} from '@loopback/authentication-jwt';
-import {ROLE} from '@demo/core-module';
 import {HttpErrors} from '@loopback/rest';
 import {promisify} from 'util';
+import {ROLE} from '../models';
 
 const jwt = require('jsonwebtoken');
 const signAsync = promisify(jwt.sign);
@@ -36,7 +36,7 @@ export class JwtService implements TokenService {
           [securityId]: decodedToken.id,
           name: decodedToken.name,
           id: decodedToken.id,
-          email: decodedToken.email,
+          email: decodedToken.name,
           role: decodedToken.role,
         },
       );

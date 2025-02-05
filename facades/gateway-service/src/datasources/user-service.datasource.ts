@@ -45,6 +45,28 @@ const config = {
         login: ['creds'],
       },
     },
+    {
+      template: {
+        method: 'GET',
+        url: '/users',
+        body: '{user}',
+      },
+      functions: {
+        create: ['user'],
+      },
+    },
+    {
+      template: {
+        method: 'GET',
+        url: '/users/{id}',
+        query: {
+          filter: '{filter}',
+        },
+      },
+      functions: {
+        findById: ['id', 'filter'],
+      },
+    },
   ],
 };
 

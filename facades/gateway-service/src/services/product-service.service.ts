@@ -2,12 +2,13 @@ import {inject, Provider} from '@loopback/core';
 import {getService} from '@loopback/service-proxy';
 import {ProductServiceDataSource} from '../datasources';
 import {Product} from '@demo/core-module';
+import {Filter} from '@loopback/repository';
 
 export interface ProductService {
   // this is where you define the Node.js methods that will be
   // mapped to REST/SOAP/gRPC operations as stated in the datasource
   // json file.
-  getProducts(): Promise<Product[]>;
+  getProducts(filter: Filter<Product> | undefined): Promise<Product[]>;
 }
 
 export class ProductServiceProvider implements Provider<ProductService> {

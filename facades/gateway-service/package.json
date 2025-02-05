@@ -60,6 +60,7 @@
     "@loopback/rest": "^14.0.10",
     "@loopback/rest-explorer": "^7.0.10",
     "@loopback/service-proxy": "^7.0.10",
+    "dotenv": "^16.4.7",
     "loopback-connector-rest": "^5.0.2",
     "tsc-watch": "^6.2.1",
     "tslib": "^2.0.0"

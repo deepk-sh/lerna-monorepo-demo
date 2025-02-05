@@ -53,7 +53,7 @@ export class UserController {
         'application/json': {
           schema: getModelSchemaRef(User, {
             title: 'NewUser',
-            exclude: ['id'],
+            exclude: ['id', 'password', 'createdOn', 'modifiedOn'],
           }),
         },
       },
@@ -166,9 +166,10 @@ export class UserController {
         description: 'User',
         content: {
           'application/json': {
-            schema: {
-              'x-ts-type': User,
-            },
+            schema: getModelSchemaRef(User, {
+              title: 'NewUser',
+              exclude: ['id', 'password'],
+            }),
           },
         },
       },
@@ -217,6 +218,9 @@ export class UserController {
   ): Promise<{token: string}> {
     const user = await this.userService.verifyCredentials(creds);
     const UserProfile = this.userService.convertToUserProfile(user);
+    /**
+     * [securityId]:user.id
+     */
     const token = await this.jwtService.generateToken({
       ...UserProfile,
       role: user?.role,

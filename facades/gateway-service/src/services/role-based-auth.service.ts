@@ -17,7 +17,7 @@ export class RoleBasedAuthProvider implements Provider<Authorizer> {
       metadata: AuthorizationMetadata,
     ) => {
       const user = ctx.principals[0]; // authenticated user
-      console.log('user details', {user});
+      // console.log('user details', {user});
       if (!user) {
         return AuthorizationDecision.DENY;
       }
