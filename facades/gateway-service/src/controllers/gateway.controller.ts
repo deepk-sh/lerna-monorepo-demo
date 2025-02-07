@@ -1,7 +1,15 @@
 // Uncomment these imports to begin using these cool features!
 
 import {inject, intercept} from '@loopback/core';
-import {OrderService, ProductService, roleAuth, UserService} from '../services';
+import {
+  OrderService,
+  Post,
+  PostSchema,
+  ProductService,
+  RestExternal,
+  roleAuth,
+  UserService,
+} from '../services';
 import {
   get,
   getModelSchemaRef,
@@ -23,6 +31,7 @@ export class GatewayController {
     @inject('services.UserService') protected userService: UserService,
     @inject('services.OrderService') protected orderService: OrderService,
     @inject('services.ProductService') protected productService: ProductService,
+    @inject('services.RestExternal') protected restExternal: RestExternal,
   ) {}
 
   @authenticate('jwt')
@@ -210,5 +219,21 @@ export class GatewayController {
     @param.filter(Product) filter?: Filter<Product>,
   ): Promise<Product[]> {
     return this.productService.getProducts(filter);
+  }
+
+  @get('/posts')
+  @response(200, {
+    description: 'Array of Posts',
+    content: {
+      'application/json': {
+        schema: {
+          type: 'array',
+          items: PostSchema,
+        },
+      },
+    },
+  })
+  async getPosts() {
+    return this.restExternal.getPost(1);
   }
 }
